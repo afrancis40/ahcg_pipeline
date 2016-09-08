@@ -1,5 +1,4 @@
-EADME 
-#Alicia- Genome reference and dbSNP files
+Genome reference and dbSNP files
 
 #Setting up VMbox to run pipeline
 1) BaseSpace:
