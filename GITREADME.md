@@ -3,7 +3,7 @@ EADME
 
 #Steps to change the remote url for git repositories
 - git clone https://github.com/shashidhar22/ahcg_pipeline.git
-- fork on github
+- fork original repository on github
 - ls -a
 - cd .git
 - vim config
@@ -13,17 +13,16 @@ EADME
 - save :x
 - git remote -v (to check if remote URL has changed)
 
-#To share a project
-- git push -u origin 
-
 #To not share a project
 - ls -a 
 - vi .gitignore 
 - to not push certain files add filenames 	
-	Ex: *.a - no .a files
-	Ex: !lib.a - no track lib.a files
+	Ex: *.a -> no .a files
+	Ex: !lib.a -> no track lib.a files
 
 #Commit the file that youve changed in your local repository
 -git add "file name" <-----DO THIS ONE 
--git commit -m "Add existing file"  ....and add small message what you changed
--git push origin "your-branch"
+-git commit -m "Some comment"  ....and add small message what you changed
+
+#Put on Github
+-git push origin master
