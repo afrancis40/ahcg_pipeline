@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 import os
 import sys
 import glob
@@ -52,11 +52,13 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if not os.path.exists(adapter_path):
         raise FileNotFoundError('Adapter file not found at {0}'.format(adapter_path))
 
+    print('Check complete. Creating output directory')
 
     #Creat output directory
     if not os.path.exists(out_path):
         os.mkdir(out_path)
 
+    print('Creating Trim fastq files')
 
     #Trim fastq files
     read1 = input_path[0]
@@ -77,6 +79,7 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
         print('Fastq trimming failed; Exiting program')
         sys.exit()
          
+    print('Trim Complete. Starting bowtie')
 
     #Align the reads using bowtie
     sam_path = '{1}.sam'.format(out_path, os.path.splitext(tread1)[0])
@@ -89,6 +92,8 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if brun.returncode != 0:
         print('Bowtie failed; Exiting program')
         sys.exit()
+
+    print('Yes , Alignment Complete. Now to add read group')
 
     #Add read group information
     add_path = '{0}/{1}_RG.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
@@ -105,6 +110,8 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
         print('Picard add read groups failed; Exiting program')
         sys.exit()
 
+    print('Picard finished adding read group. Marking PCR duplicates')
+
     #Mark PCR duplicates
     dup_path = '{0}/{1}_MD.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     met_path = '{0}/{1}_MD.metrics'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
@@ -117,6 +124,8 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if mdrun.returncode != 0:
         print('Picard mark duplicate failed; Exiting program')
         sys.exit()
+
+    print('Finish marking duplicates. Now fix mate information')
 
     #Fix mate information
     fix_path = '{0}/{1}_FM.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
@@ -131,6 +140,8 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
         print('Picard fix mate information failed; Exiting program')
         sys.exit()
    
+    print('Fix mate finished. Now runin realigner target creator')
+ 
     #Run realigner target creator
     interval_path = '{0}/{1}.intervals'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0]) 
     
@@ -145,6 +156,8 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
         print('Realigner Target creator failed; Exiting program')
         sys.exit()
      
+    print('Finished realigner target creator')
+    print('Starting indel realigner')
 
     #Run indel realigner
     ral_path = '{0}/{1}_IR.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
@@ -160,6 +173,9 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
         print('Indel realigner creator failed; Exiting program')
         sys.exit()
 
+    print('Finish indel realigner. Almost done')
+    print('Now assessing base quality score recalibration')
+
     #Base quality score recalibration
     bqs_path = '{0}/{1}.table'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
      
@@ -174,6 +190,8 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
         print('Base quality score recalibrator failed; Exiting program')
         sys.exit()
     
+    print('Yeaaa !!!! lets print out the reads')
+
     #Print Reads
     fbam_path = '{0}/{1}_final.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     prcmd = ['java', '-jar', gatk_path, '-T', 'PrintReads', '-R', ref_path, '-I',
@@ -187,6 +205,7 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
         print('Print reads failed; Exiting program')
         sys.exit()
 
+    print('Last step: Haplotype caller')
 
     #Haplotype caller
     vcf_path = '{0}/variants.vcf'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
