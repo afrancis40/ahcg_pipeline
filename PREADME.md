@@ -27,6 +27,7 @@ Download genomic reference and dbSNP file using command:
 - tar -zxvf file.tar.gz
 
 Before starting the pipeline build the indexes for ref. genome
+	
 	1) Bowtie index
 	-wget http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-build-indexer
 		Command: bowtie2-build -f hg19.fa [name for index refgen] -> refgen.*.bt2
