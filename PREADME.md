@@ -2,7 +2,6 @@ Alicia Franics
 # Preparing files to run variant pipeline
 
 ## Setting up VMbox
-
 -Download VirtualBox if not installed already[url: ]
 
 ## Setting up BaseSpace:
@@ -15,6 +14,7 @@ Alicia Franics
 
 -Download puTTY [url: ]
 -Enter hostname: vagrant@localhost, port: 2222 , ps: vagrant
+
 -Use if puTTY is missing download -> sudo apt-get install
 
 ##Download pipeline from github
@@ -55,14 +55,15 @@ Before starting the pipeline build the indexes for ref. genome
 ## Download Test Data
 
 ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+
 ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+
 gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
 gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
 head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
 head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 
-#Help for pipeline
-
+##Help for pipeline
 ahcg_pipeline.py (-h)
 
 ## Run pipeline
