@@ -1,26 +1,22 @@
-Alicia Franics
-# Preparing files to run variant pipeline
+Alicia Francis
+Preparing files to run variant pipeline
 
-## Setting up VMbox
--Download VirtualBox if not installed already[url: ]
+Setting up VMbox
+-Download VirtualBox if not installed already [url: ]
 
-## Setting up BaseSpace:
-
--Download BaseSpace Native AppVM(.ova file)[url: ] 
+Setting up BaseSpace:
+-Download BaseSpace Native AppVM(.ova file) [url: ] 
 -Import to VMBox
 -Have BaseSpace opened before puTTY
 	
-##Access BaseSpace through a shell
-
+Access BaseSpace through a shell
 -Download puTTY [url: ]
 -Enter hostname: vagrant@localhost, port: 2222 , ps: vagrant
+*Use if puTTY is missing download -> sudo apt-get install
 
--Use if puTTY is missing download -> sudo apt-get install
-
-##Download pipeline from github
-
-Git clone https://github.com/shashidhar22/ahcg_pipeline.git
--fork on github 
+Download pipeline from github
+-Git clone https://github.com/shashidhar22/ahcg_pipeline.git
+-Fork on github 
 
 Download genomic reference and dbSNP file using command:
 - wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz [27m]
@@ -52,119 +48,116 @@ Before starting the pipeline build the indexes for ref. genome
 		Command: java -jar ~/ahcg_pipeline/lib/picard.jar CreateSequenceDictionary \ 
 		R=hg19.fa \ O=reference.dict
 
-## Download Test Data
+Download Test Data
 
-ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+		gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+		gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+		head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
+		head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 
-ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
-
-gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
-gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
-head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
-head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
-
-##Help for pipeline
+Help for pipeline
 ahcg_pipeline.py (-h)
 
-## Run pipeline
+Run pipeline
+	-sudo apt-get install python3-minimal
+	-sudo apt-get install unzip 
+	-unzip hg19.zip --->for hg19.zip error
 
--sudo apt-get install python3-minimal
--sudo apt-get install unzip 
--unzip hg19.zip --->for hg19.zip error
+	VariantCaller options
+		-t (trimmomatic path) 
+		-b (bowtie path)
+		-p (picard path)
+		-g (gatk path)
+		-i (input to pe)  
+		-w (bowtie index ref path) 
+		-d (dbsnp path .vcf)
+		-r (ref path)
+		-a (adapter file) 
+		-o (output path to directory) 
 
-VariantCaller -t (trimmomatic path) 
-	-b (bowtie path) ...
-	-p (picard path)
-	-g (gatk path)
-	-i (input to pe)  ..,..
-	-w (bowtie index ref path) 
-	-d (dbsnp path .vcf)
-	-r (ref path)
-	-a (adapter file) 
-	-o (output path to directory) 
+	Place in background
+	screen
+		python3 ahcg_pipeline.py 
+		-t ~/ahcg_pipeline/lib/Trimmomatic-0.36/trimmomatic-0.36.jar \
+		-b ~/ahcg_pipeline/lib/bowtie2-2.2.9/bowtie2 \
+		-p ~/ahcg_pipeline/lib/picard.jar \
+		-g ~/ahcg_pipeline/lib/GenomeAnalysisTK.jar \
+		-i ~/ahcg_pipeline/test*.fastq \ 
+		-w ~/ahcg_pipeline/resources/genome/hg19 \
+		-d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf.gz \
+		-r ~/ahcg_pipeline/resources/genome/hg19.fa \
+		-a ~/ahcg_pipeline/lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa \
+		-o ~/ahcg_pipeline/variant
+	Ctrl + A Ctrl + D
 
-Place in background
-screen
-python3 ahcg_pipeline.py -t ~/ahcg_pipeline/lib/Trimmomatic-0.36/trimmomatic-0.36.jar \
--b ~/ahcg_pipeline/lib/bowtie2-2.2.9/bowtie2 \
--p ~/ahcg_pipeline/lib/picard.jar \
--g ~/ahcg_pipeline/lib/GenomeAnalysisTK.jar \
--i ~/ahcg_pipeline/test*1.fastq \ 
--w ~/ahcg_pipeline/resources/genome/hg19 \
--d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf.gz \
--r ~/ahcg_pipeline/resources/genome/hg19.fa \
--a ~/ahcg_pipeline/lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa \
--o ~/ahcg_pipeline/variant
-Ctrl + A Ctrl + D
+	To resume
+		screen -r 
+	Output: .vcf file
 
-To resume
-screen -r 
+Setting up Github
 
-##Setting up Github
+	1. Steps to change the remote url for git repositories
+		- git clone https://github.com/shashidhar22/ahcg_pipeline.git
+		- fork on github
+		- ls -a
+		- cd .git
+		- vim config
+		- find url line
+		- git remote set-url origin htttps://github.com/username/otherrepository.git
+			- change the username to your own
+		- git remote -v (to check if remote URL has changed)
+		EXTRA
+		-git config --global user.name "Your Name"
+		-git config --global user.email email@blah.com
 
-1. Steps to change the remote url for git repositories
-- git clone https://github.com/shashidhar22/ahcg_pipeline.git
-- fork on github
-- ls -a
-- cd .git
-- vim config
-- find url line
-- git remote set-url origin htttps://github.com/username/otherrepository.git
-	- change the username to your own
-- save :x
-- git remote -v (to check if remote URL has changed)
+	2. To share a project
+		- git push -u origin 
 
-2. To share a project
-- git push -u origin 
+	3. To not share a project
+		- ls -a 
+		- vi .gitignore 
+		- to not push certain files add filenames 	
+			Ex: *.a - no .a files
+			Ex: !lib.a - no track lib.a files
 
-3. To not share a project
-- ls -a 
-- vi .gitignore 
-- to not push certain files add filenames 	
-	Ex: *.a - no .a files
-	Ex: !lib.a - no track lib.a files
+	4. Commit the file that you have changed in your local repository
+		-git add "file name"  <----DO THIS ONE
+		-git commit -m "Add existing file"  ....and add small message what you changed
+	
+	5. Put on Github
+		-git push origin master
 
-4. Commit the file that you have changed in your local repository
--git add "file name"  <----DO THIS ONE
--git commit -m "Add existing file"  ....and add small message what you changed
-#Put on Github
--git push origin master
+Using bedtools
 
-EXTRA
-git config --global user.name "Your Name"
-git config --global user.email email@blah.com
+	1. Download file
+		wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
+	2. Find variant NM_007294 from BRCA1
+		grep 'BRCA1' hg19_refGene.txt > brca.fa 
+		grep 'NM_007294' brca.fa > brca_variant.fa 
+	3. Convert .txt to .bed
+		Command:
 
-## Using bedtools
+	4. Download bedtools
+ 		wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+ 		tar -zxvf bedtools-2.25.0.tar.gz
+ 		cd bedtools2
+ 		make
+	 	*Make sure to place /path/to/lib/folder in .profile 
 
-#Download file
+	5. Use fastaFromBed
 
-wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
-#Find variant NM_007294 from BRCA1
-grep 'BRCA1' hg19_refGene.txt > brca.fa 
-grep 'NM_007294' brca.fa > brca_variant.fa 
+Extract reads mapping to region of interest
+	1. Download the NA12878 HiSeq Exome dataset:
+		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam	
+ 		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_2_NA12878.bwa.markDuplicates.bam	
+ 		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_1_NA12878.bwa.markDuplicates.bam
+ 		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_2_NA12878.bwa.markDuplicates.bam 
 
-#Convert .txt to .bed
-	Command:
+	2. Use samtools to subset the bam file to regions corresponding to BRCA1:
+		samtools view -L <bed file> -b -o < outout bam file > < input bam file >
+		Note: -b just specifies that the output needs to be a bam file.
 
-#Download bedtools
- wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
- tar -zxvf bedtools-2.25.0.tar.gz
- cd bedtools2
- make
-
-#Use fastaFromBed
-
-## Extract reads mapping to region of interest
-1. Download the NA12878 HiSeq Exome dataset:
-
- wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam	
- wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_2_NA12878.bwa.markDuplicates.bam	
- wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_1_NA12878.bwa.markDuplicates.bam
- wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_2_NA12878.bwa.markDuplicates.bam 
-
-2. Using samtools to subset the bam file to regions corresponding to BRCA1:
-samtools view -L <bed file> -b -o < outout bam file > < input bam file >
-Note: -b just specifies that the output needs to be a bam file.
-
-3. Using bedtools to convert the bam file to a fastq file:
- bedtools bamtofastq -i <bam file> -fq < fastq r1> -fq2 < fastq r2>
+	3. Using bedtools to convert the bam file to a fastq file:
+ 		bedtools bamtofastq -i <bam file> -fq < fastq r1> -fq2 < fastq r2>
