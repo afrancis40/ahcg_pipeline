@@ -3,11 +3,13 @@ Alicia Franics
 
 ## Setting up VMbox
 
--Download VirtualBox if not installed already [url: ]
+-Download VirtualBox if not installed already 
+ 	[url: ]
 
 ## Setting up BaseSpace:
 
--Download BaseSpace Native AppVM(.ova file) [url: ] 
+-Download BaseSpace Native AppVM(.ova file) 
+	[url: ] 
 -Import to VMBox
 -Have BaseSpace opened before puTTY
 	
@@ -19,7 +21,7 @@ Alicia Franics
 
 ##Download pipeline from github
 
--git clone https://github.com/shashidhar22/ahcg_pipeline.git
+Git clone https://github.com/shashidhar22/ahcg_pipeline.git
 -fork on github 
 
 Download genomic reference and dbSNP file using command:
