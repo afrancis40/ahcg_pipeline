@@ -3,8 +3,8 @@ Alicia Francis
 ## Preparing VMbox, BaseSpace, and Shell:
 
 	Setting up VMbox
-		Download [VirtualBox](http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Win.exe) if not installed already
-
+		Download VirtualBox if not installed already
+		-http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Win.exe
 	Setting up BaseSpace:
 		-Download BaseSpace Native AppVM(.ova file) [url: ] 
 		-Import to VMBox
