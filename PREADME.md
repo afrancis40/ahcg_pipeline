@@ -168,11 +168,15 @@ Alicia Francis
  		bedtools bamtofastq -i <bam file> -fq < fastq r1> -fq2 < fastq r2>
 
 ##Calling BRCA1 Variant:
-	-wget http://vannberg.biology.gatech.edu/data/brca.fa
-	-download read files
-		gunzip filename
-	-download chr17.fa
-	
+	-Download BRCA1 reference file
+		-wget http://vannberg.biology.gatech.edu/data/brca.fa
+	-Download synthetic datasets simulating the variants in NA12878
+		-wget http://vannberg.biology.gatech.edu/data/reads_B1_27000x150bp_0S_0I_0D_0U_0N_1.fq.gz 
+		-wget http://vannberg.biology.gatech.edu/data/reads_B1_27000x150bp_0S_0I_0D_0U_0N_2.fq.gz
+ 		-gunzip <filename> 
+	-Download chr17.fa
+		-wget http://vannberg.biology.gatech.edu/data/chr17.fa
+
 	Create index for reference file 
 	1. Create bowtie index:
 		bowtie2-build chr17.fa chr17
