@@ -134,7 +134,7 @@ Alicia Francis
 
 ## Using Bedtools:
 
-	1. Download file
+	1. Download gene coordinates file for hg19
 		wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
 
 	2. Find variant NM_007294 from BRCA1
