@@ -128,8 +128,9 @@ Alicia Francis
 		-git add "file name"  <----DO THIS ONE
 		-git commit -m "Add existing file"  ....and add small message what you changed
 	
-	5. Put on Github
-		-git push origin master
+	5. Update on Github
+		-git push origin master (from shell to github)
+		-git pull origin master (from github to shell)
 
 ## Using Bedtools:
 
