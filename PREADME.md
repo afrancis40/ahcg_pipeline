@@ -1,28 +1,30 @@
 Alicia Francis
-Preparing files to run variant pipeline
 
-Setting up VMbox
--Download VirtualBox if not installed already [url: ]
+# Preparing VMbox, BaseSpace, and shell:
 
-Setting up BaseSpace:
--Download BaseSpace Native AppVM(.ova file) [url: ] 
--Import to VMBox
--Have BaseSpace opened before puTTY
+	Setting up VMbox
+		-Download [VirtualBox](http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Win.exe) if not installed already
+
+	Setting up BaseSpace:
+		-Download BaseSpace Native AppVM(.ova file) [url: ] 
+		-Import to VMBox
+		-Have BaseSpace opened before puTTY
 	
-Access BaseSpace through a shell
--Download puTTY [url: ]
--Enter hostname: vagrant@localhost, port: 2222 , ps: vagrant
-*Use if puTTY is missing download -> sudo apt-get install
+	Access BaseSpace through a shell
+		-Download puTTY [url: ]
+		-Enter hostname: vagrant@localhost
+		-Port: 2222 , Ps: vagrant
+		*Use if puTTY is missing download -> sudo apt-get install
 
-Download pipeline from github
--Git clone https://github.com/shashidhar22/ahcg_pipeline.git
--Fork on github 
+	Download pipeline from github
+		-Git clone https://github.com/shashidhar22/ahcg_pipeline.git
+		-Fork on github 
 
-Download genomic reference and dbSNP file using command:
-- wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz [27m]
-- tar -zxvf file.tar.gz
+	Download genomic reference and dbSNP file using command:
+		- wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz [27m]
+		- tar -zxvf file.tar.gz
 
-Before starting the pipeline build the indexes for ref. genome
+Before starting the pipeline build the indexes for ref. genome:
 	
 	1) Bowtie index
 	-wget http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-build-indexer
@@ -48,17 +50,17 @@ Before starting the pipeline build the indexes for ref. genome
 		Command: java -jar ~/ahcg_pipeline/lib/picard.jar CreateSequenceDictionary \ 
 		R=hg19.fa \ O=reference.dict
 
-Download Test Data
+Download Test Data:
 
-	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
-	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
-		gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
-		gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
-		head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
-		head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
+	[read1 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz)
+	[read2 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz)
+	gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+	gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+	head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
+	head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 
 Help for pipeline
-ahcg_pipeline.py (-h)
+	ahcg_pipeline.py (-h)
 
 Run pipeline
 	-sudo apt-get install python3-minimal
@@ -149,7 +151,7 @@ Using bedtools
 	5. Use fastaFromBed
 
 Extract reads mapping to region of interest
-	1. Download the NA12878 HiSeq Exome dataset:
+	1. Download the NA12878 HiSeq Exome dataset bam file:
 		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam	
  		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_2_NA12878.bwa.markDuplicates.bam	
  		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_1_NA12878.bwa.markDuplicates.bam
