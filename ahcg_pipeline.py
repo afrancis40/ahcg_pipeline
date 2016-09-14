@@ -83,7 +83,7 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
 
     #Align the reads using bowtie
     sam_path = '{1}.sam'.format(out_path, os.path.splitext(tread1)[0])
-    bcmd = [ bowtie_path, '-x', index_path, '-S', sam_path, '-p', '1' , '-1',
+    bcmd = [ 'sudo', bowtie_path, '-x', index_path, '-S', sam_path, '-p', '1' , '-1',
             tread1, '-2', tread2]
     
     brun = subprocess.Popen(bcmd, shell=False)
