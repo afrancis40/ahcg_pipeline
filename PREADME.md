@@ -27,18 +27,18 @@ Alicia Francis
 ## Before Starting the Pipeline Build Indexes for Reference Genome:
 	
 	1) Bowtie index
-	-wget http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-build-indexer
+		-wget http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-build-indexer
 		Command: bowtie2-build -f hg19.fa [name for index refgen] -> refgen.*.bt2
 		-or-
 		wget ftp://ftp.ccb.jhu.edu/pub/data/bowtie2_indexes/hg19.zip -> hg19.zip  [37m]
 
 	2) Fasta index 
-	-Resources: Fasta index using Samtools faidx [url: http://www.htslib.org/doc/samtools.html]
+		-Resources: Fasta index using Samtools faidx [url: http://www.htslib.org/doc/samtools.html]
 		sudo apt-get install samtools
 		Command: samtools faidx [file.fa] -> fasta file.fai
 
 	3) Genome dictionary file 
-	-Resorces: Genome dict file using picard [url: https://broadinstitute.github.io/picard/command-line-overview.html#CreateSequenceDictionary]
+		-Resorces: Genome dict file using picard [url: https://broadinstitute.github.io/picard/command-line-overview.html#CreateSequenceDictionary]
 		Used to download java8:
 		sudo apt-get install software-properties-common python-software-properties
 		sudo add-apt-repository ppa:webupd8team/java
@@ -52,12 +52,12 @@ Alicia Francis
 
 ## Download Test Data:
 
-1. [Read1 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz)
-2. [Read2 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz)
- gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
- gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
- head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
- head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
+	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+	gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+ 	gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+ 	head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
+ 	head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 
 ## Run Pipeline:
 	-sudo apt-get install python3-minimal
@@ -135,9 +135,11 @@ Alicia Francis
 
 	1. Download file
 		wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
+
 	2. Find variant NM_007294 from BRCA1
 		grep 'BRCA1' hg19_refGene.txt > brca.fa 
 		grep 'NM_007294' brca.fa > brca_variant.fa 
+
 	3. Convert .txt to .bed
 		Command:
 
@@ -165,18 +167,19 @@ Alicia Francis
  		bedtools bamtofastq -i <bam file> -fq < fastq r1> -fq2 < fastq r2>
 
 ##Calling BRCA1 Variant:
-	wget http://vannberg.biology.gatech.edu/data/brca.fa
-
-	Download to reads files
+	-wget http://vannberg.biology.gatech.edu/data/brca.fa
+	-download read files
 		gunzip filename
-	Download chr 17.fa
-	Create index for refernce file 
-		1. Create bowtie index
-			bowtie2-build chr17.fa chr17
-		2. Picard genome dictionary:
-			java -jar ~/ahcd_pipeline/lib/picard.jar CreateSequenceDictionary R=chr17.fa O=chr17.dict
-			******place picard in path later*****
-		3. Samtools fasta index
-			samtools fiadx chr17.fa
+	-download chr17.fa
+	
+	Create index for reference file 
+	1. Create bowtie index:
+		bowtie2-build chr17.fa chr17
+	2. Picard genome dictionary:
+		java -jar ~/ahcd_pipeline/lib/picard.jar CreateSequenceDictionary R=chr17.fa O=chr17.dict
+		******place picard in path later*****
+	3. Samtools fasta index:
+		samtools fiadx chr17.fa
+
 	Run variant call pipeline and replace necessary file paths (See above Run Pipeline)
 		Command: python3 ahcg_pipeline.py -t ~/ahcg_pipeline/lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ~/ahcg_pipeline/lib/bowtie2-2.2.9/bowtie2 -p ~/ahcg_pipeline/lib/picard.jar -g ~/ahcg_pipeline/lib/GenomeAnalysisTK.jar -i ~/ahcg_pipeline/resources/reads*.fq -w ~/ahcg_pipeline/resources/chr17 -d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf -r ~/ahcg_pipeline/resources/chr17.fa -a ~/ahcg_pipeline/lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ~/ahcg_pipeline/brca
