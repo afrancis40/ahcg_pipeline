@@ -1,9 +1,9 @@
 Alicia Francis
 
-## Preparing VMbox, BaseSpace, and shell:
+## Preparing VMbox, BaseSpace, and Shell:
 
 	Setting up VMbox
-		-Download [VirtualBox](http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Win.exe) if not installed already
+		Download [VirtualBox](http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Win.exe) if not installed already
 
 	Setting up BaseSpace:
 		-Download BaseSpace Native AppVM(.ova file) [url: ] 
@@ -24,7 +24,7 @@ Alicia Francis
 		- wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz [27m]
 		- tar -zxvf file.tar.gz
 
-## Before starting the pipeline build the indexes for ref. genome:
+## Before Starting the Pipeline Build Indexes for Reference Genome:
 	
 	1) Bowtie index
 	-wget http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-build-indexer
@@ -52,14 +52,14 @@ Alicia Francis
 
 ## Download Test Data:
 
- [read1 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz)
- [read2 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz)
+1. [Read1 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz)
+2. [Read2 file](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz)
  gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
  gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
  head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
  head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 
-## Run pipeline
+## Run Pipeline:
 	-sudo apt-get install python3-minimal
 	-sudo apt-get install unzip 
 	-unzip hg19.zip --->for hg19.zip error
@@ -98,7 +98,7 @@ Alicia Francis
 		screen -r 
 	Output: .vcf file
 
-## Setting up Github
+## Setting up Github:
 
 	1. Steps to change the remote url for git repositories
 		- git clone https://github.com/shashidhar22/ahcg_pipeline.git
@@ -131,7 +131,7 @@ Alicia Francis
 	5. Put on Github
 		-git push origin master
 
-## Using bedtools
+## Using Bedtools:
 
 	1. Download file
 		wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
@@ -150,7 +150,7 @@ Alicia Francis
 
 	5. Use fastaFromBed
 
-## Extract reads mapping to region of interest
+## Extract Reads Mapping to Region of Interest:
 	1. Download the NA12878 HiSeq Exome dataset bam file:
 		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam	
  		wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_2_NA12878.bwa.markDuplicates.bam	
@@ -163,3 +163,20 @@ Alicia Francis
 
 	3. Using bedtools to convert the bam file to a fastq file:
  		bedtools bamtofastq -i <bam file> -fq < fastq r1> -fq2 < fastq r2>
+
+##Calling BRCA1 Variant:
+	wget http://vannberg.biology.gatech.edu/data/brca.fa
+
+	Download to reads files
+		gunzip filename
+	Download chr 17.fa
+	Create index for refernce file 
+		1. Create bowtie index
+			bowtie2-build chr17.fa chr17
+		2. Picard genome dictionary:
+			java -jar ~/ahcd_pipeline/lib/picard.jar CreateSequenceDictionary R=chr17.fa O=chr17.dict
+			******place picard in path later*****
+		3. Samtools fasta index
+			samtools fiadx chr17.fa
+	Run variant call pipeline and replace necessary file paths (See above Run Pipeline)
+		Command: python3 ahcg_pipeline.py -t ~/ahcg_pipeline/lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ~/ahcg_pipeline/lib/bowtie2-2.2.9/bowtie2 -p ~/ahcg_pipeline/lib/picard.jar -g ~/ahcg_pipeline/lib/GenomeAnalysisTK.jar -i ~/ahcg_pipeline/resources/reads*.fq -w ~/ahcg_pipeline/resources/chr17 -d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf -r ~/ahcg_pipeline/resources/chr17.fa -a ~/ahcg_pipeline/lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ~/ahcg_pipeline/brca
