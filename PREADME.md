@@ -88,7 +88,7 @@ Alicia Francis
 		-g ~/ahcg_pipeline/lib/GenomeAnalysisTK.jar \
 		-i ~/ahcg_pipeline/test*.fastq \ 
 		-w ~/ahcg_pipeline/resources/genome/hg19 \
-		-d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf.gz \
+		-d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf \
 		-r ~/ahcg_pipeline/resources/genome/hg19.fa \
 		-a ~/ahcg_pipeline/lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa \
 		-o ~/ahcg_pipeline/variant
