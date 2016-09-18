@@ -28,7 +28,7 @@ Alicia Francis
 	
 	1) Bowtie index
 		-wget http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-build-indexer
-		Command: bowtie2-build -f hg19.fa [name for index refgen] -> refgen.*.bt2
+		Command: bowtie2-build -f hg19.fa -o 3[offset index rate] hg19 [name for index refgen] -> hg19*.bt2
 		-or-
 		wget ftp://ftp.ccb.jhu.edu/pub/data/bowtie2_indexes/hg19.zip -> hg19.zip  [37m]
 
