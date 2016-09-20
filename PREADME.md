@@ -191,7 +191,7 @@ Alicia Francis
 
 ##Comparing gene list between Color Genomics and Otogenomics
 Gene List Combine:
-Gene	 NCBI Reference 	OMIM
+	Gene	 NCBI Reference 	OMIM
 	AR	 NM_000044.3		313700
 	ATM 	 NM_000051.3 		607585
 	BARD1 	 NM_000465.3 		601593
