@@ -189,32 +189,3 @@ Alicia Francis
 	Run variant call pipeline and replace necessary file paths (See above Run Pipeline)
 		Command: python3 ahcg_pipeline.py -t ~/ahcg_pipeline/lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ~/ahcg_pipeline/lib/bowtie2-2.2.9/bowtie2 -p ~/ahcg_pipeline/lib/picard.jar -g ~/ahcg_pipeline/lib/GenomeAnalysisTK.jar -i ~/ahcg_pipeline/resources/reads*.fq -w ~/ahcg_pipeline/resources/chr17 -d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf -r ~/ahcg_pipeline/resources/chr17.fa -a ~/ahcg_pipeline/lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ~/ahcg_pipeline/brca
 
-##Comparing gene list between Color Genomics and Otogenomics
-Gene List Combine:
-	Gene	 NCBI Reference 	OMIM
-	AR	 NM_000044.3		313700
-	ATM 	 NM_000051.3 		607585
-	BARD1 	 NM_000465.3 		601593
-	BRCA1 	 NM_007298.3 		113705
-	BRCA2 	 NM_000059.3 		600185
-	BRIP1 	 NM_032043.2 		605882
-	CASP8 	 NM_001080124.1 	601763 
-	CDH1 	 NM_004360.3 		192090 
-	CHEK2 	 NM_001005735.1 	604373 
-	DIRAS3 	 NM_004675.2 		605193 
-	*EPCAM	 NM_002354.2		185535
-	ERBB2 	 NM_001005862.1 	164870 
-	*MLH1	 NM_000249.3		120436
-	*MSH2	 NM_000251.2		609309
-	*MSH6    NM_000179.2		600678
-	NBN 	 NM_002485.4 		602667 
-	PALB2 	 NM_024675.3 		601355 
-	*PMS2    
-	PTEN 	 NM_000314.4		601728 
-	RAD50 	 NM_005732.3 		604040 
-	RAD51 	 NM_001164269.1 	179617 
-	*RAD51C
-	*RAD51D
-	STK11 	 NM_000455.4 		602216 
-	TGFB1 	 NM_000660.4 		190180 
-	TP53 	 NM_000546.5 		191170 
