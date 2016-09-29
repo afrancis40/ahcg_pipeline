@@ -188,7 +188,4 @@ Alicia Francis
 
 	Run variant call pipeline and replace necessary file paths (See above Run Pipeline)
 		Command: python3 ahcg_pipeline.py -t ~/ahcg_pipeline/lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ~/ahcg_pipeline/lib/bowtie2-2.2.9/bowtie2 -p ~/ahcg_pipeline/lib/picard.jar -g ~/ahcg_pipeline/lib/GenomeAnalysisTK.jar -i ~/ahcg_pipeline/resources/reads*.fq -w ~/ahcg_pipeline/resources/chr17 -d ~/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf -r ~/ahcg_pipeline/resources/chr17.fa -a ~/ahcg_pipeline/lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ~/ahcg_pipeline/brca
-<<<<<<< HEAD
-=======
 
->>>>>>> fe9fafc6ba180ba0c5decd585a241a682c39ee61
