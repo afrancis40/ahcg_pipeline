@@ -1,4 +1,5 @@
 #!/bin/bash
+#Alicia Francis
 #Check Test file sample test* is original and test*1 is 1,000 downsize
 TRIM=Trimmomatic-0.36/trimmomatic-0.36.jar 
 BOW=bowtie2-2.2.9/bowtie2
