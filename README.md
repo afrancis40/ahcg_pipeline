@@ -230,7 +230,7 @@ Use the following protocol to download and prepare test dataset from NIST sample
 		python comp.py NA12878_variants.vcf BRCA1_brca_exchange_variants.csv BRCA2_brca_exchange_variants.csv \
 		| tee brcaxref_clin.txt [62 results]
 
-                cat brcaxref_clin.txt \|awk 'BEGIN {FS="\t"} {split($1, coord, ":"); 
+                cat brcaxref_clin.txt \|awk 'BEGIN {FS="\t"} {split($0, coord, ":"); 
 		printf("%s\t%s\t%s\t%s\n", coord[1], coord[2], coord[2], $2)}' \|
                 sed -E -e 's/^([^c].*)/chr\1/' > benign_brcaxref.bed
 
@@ -239,4 +239,4 @@ Use the following protocol to download and prepare test dataset from NIST sample
 		bedtools genomecov -ibam new.bam -bga [patient bed file]
 		bedtools intersect -split -a [gene bed file] -b [patient bed file] -bed > output.bed
 		bedtools intersect -a brcadepth.bed -b benign_brcaxref.bed -wo > brca1_reprot.bed
-		cat brca_clinical_nonbenign_final.bed | cut -f4,5,7,8,10 > brca1_Report.bed [5 results]
+		cat brca1_report.bed | cut -f4,5,7,8,10 > brca1_Report.bed [5 results]
