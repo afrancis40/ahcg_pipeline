@@ -238,5 +238,5 @@ Use the following protocol to download and prepare test dataset from NIST sample
 		samtools view -L [variant bed file] -b project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwq.markDuplicates.bam > new.bam
 		bedtools genomecov -ibam new.bam -bga [patient bed file]
 		bedtools intersect -split -a [gene bed file] -b [patient bed file] -bed > output.bed
-		bedtools intersect -a brcadepth.bed -b benign_brcaxref.bed -wo > brca1_reprot.bed
+		bedtools intersect -a brcadepth.bed -b benign_brcaxref.bed -wo > brca1_report.bed
 		cat brca1_report.bed | cut -f4,5,7,8,10 > brca1_Report.bed [5 results]
