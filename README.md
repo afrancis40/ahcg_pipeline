@@ -154,7 +154,7 @@ Use the following protocol to download and prepare test dataset from NIST sample
 	2. Find variant NM_007294 from BRCA1
 		grep 'BRCA1' hg19_refGene.txt > brca.fa 
 		grep 'NM_007294' brca.fa > brca_variant.fa 
-	
+	        *NM_007294 had more complete exomes 
 	3. Download bedtools
                 wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
                 tar -zxvf bedtools-2.25.0.tar.gz
@@ -168,4 +168,75 @@ Use the following protocol to download and prepare test dataset from NIST sample
 
 ## Extracting Variants Mapping to NA12878
 
+## How to Get NM numbers for Gene List
+
+##Create Variant bed file & Compare VCF file
+
+	1) Extract regions from the gene list found within the reference file
+		awk '{print $2}' genelist.txt > nm_filename.txt
+		grep -f nm_filename.txt hg19_refGene.txt > genecoords.txt	
+
+	2) Create bed file from the gene list
+		Command: conver_bed.py -i genecoords.txt -o nm_hg19_coord.bed
 	
+	3) Find variants from the coordinate files
+		bedtools intersect -a NA12878_variants.vcf -b nm_hg19_coord.bed > NA12878_hg19compare.vcf
+	
+	4) Compare GIAB to variant file
+		*GIAB does not hae chr like .vcf so put in the file
+		awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf > giabCHR.vcf
+		bedtools intersect -header -a giabCHR.vcf -b nm_hg19_coord.bed > giab_chr_compare_varVCF.vcf 
+
+	5) Compare intersecting VCF files
+		bedtools intersect -a NA12878_hg19compare.vcf -b giab_chr_compare_varVCF.vcf > morevariants.vcf
+
+## Run VSQR
+	
+	1) The files you'll need are the following:
+	https://software.broadinstitute.org/gatk/download/bundle
+	dbSNP: 
+	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/dbsnp_138.hg19.vcf.gz
+
+	HapMap:
+	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/hapmap_3.3.hg19.sites.vcf.gz
+	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/hapmap_3.3.hg19.sites.vcf.idx.gz
+
+	Omni:
+	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_omni2.5.hg19.sites.vcf.gz
+	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_omni2.5.hg19.sites.vcf.idx.gz
+
+	1000G Phase 1:
+	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_phase1.snps.high_confidence.hg19.sites.vcf.gz
+	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_phase1.snps.high_confidence.hg19.sites.vcf.idx.gz
+
+	2) Create a tabix indexed vcf file
+		a) bgzip the vcf file
+			bzgip <file.vcf>
+		b) tabix index the compressed vcf file
+			tabix -p vcf sample.vcf.gz
+		*use: cksum <filename> to see if file downloaded correctly
+		*See script ...
+
+	3) VariantRecalibrator
+		- https://software.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_variantrecalibration_VariantRecalibrator.php
+		*Look within the variant files for look at the lines that resemble --> -an DP -an AD -an GQ and put the -an for what is there
+		*See script run_variantrecal.sh
+
+	4) Apply Recalibration
+		*Used to check if correct variants are called
+
+#Create BRCA1 clinical report
+	1) Match variants from vcf with clinical risks
+		python comp.py NA12878_variants.vcf BRCA1_brca_exchange_variants.csv BRCA2_brca_exchange_variants.csv \
+		| tee brcaxref_clin.txt [62 results]
+
+                cat brcaxref_clin.txt \|awk 'BEGIN {FS="\t"} {split($1, coord, ":"); 
+		printf("%s\t%s\t%s\t%s\n", coord[1], coord[2], coord[2], $2)}' \|
+                sed -E -e 's/^([^c].*)/chr\1/' > benign_brcaxref.bed
+
+	2) Obtain Report
+		samtools view -L [variant bed file] -b project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwq.markDuplicates.bam > new.bam
+		bedtools genomecov -ibam new.bam -bga [patient bed file]
+		bedtools intersect -split -a [gene bed file] -b [patient bed file] -bed > output.bed
+		bedtools intersect -a brcadepth.bed -b benign_brcaxref.bed -wo > brca1_reprot.bed
+		cat brca_clinical_nonbenign_final.bed | cut -f4,5,7,8,10 > brca1_Report.bed [5 results]
