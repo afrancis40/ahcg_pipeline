@@ -10,34 +10,77 @@ Variant calling pipeline for genomic data analysis
 4. [Picard tools - version 2.6.0](https://github.com/broadinstitute/picard/releases/download/2.6.0/picard.jar)
 5. [GATK - version 3.4](https://software.broadinstitute.org/gatk/download/)
 
+
+## Preparing VMbox, BaseSpace, and Shell:
+
+        Setting up VMbox
+                Download VirtualBox if not installed already
+                -http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Win.exe
+        Setting up BaseSpace:
+                -Download BaseSpace Native AppVM(.ova file) [url: ]
+                -Import to VMBox
+                -Have BaseSpace opened before puTTY
+
+        Access BaseSpace through a shell
+                -Download puTTY [url: ]
+                -Enter hostname: vagrant@localhost
+                -Port: 2222 , Ps: vagrant
+                *Use if puTTY is missing download -> sudo apt-get install
+
+        Download pipeline from github
+                -Git clone https://github.com/shashidhar22/ahcg_pipeline.git
+                -Fork on github
+
+        Download genomic reference and dbSNP file using command:
+                - wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz [27m]
+                - tar -zxvf file.tar.gz
+
+## Setting up Github:
+
+        1. Steps to change the remote url for git repositories
+                - git clone https://github.com/shashidhar22/ahcg_pipeline.git
+                - fork on github
+                - ls -a
+                - cd .git
+                - vim config
+                - find url line
+                - git remote set-url origin htttps://github.com/username/otherrepository.git
+                        - change the username to your own
+                - git remote -v (to check if remote URL has changed)
+        2. To share a project
+                - git push -u origin
+
+        3. To not share a project
+                - ls -a
+                - vi .gitignore
+                - to not push certain files add filenames
+                        Ex: *.a - no .a files
+                        Ex: !lib.a - no track lib.a files
+
+        4. Commit the file that you have changed in your local repository
+                -git add "file name"  <----DO THIS ONE
+                EXTRA -git config --global user.name "Your Name"
+                EXTRA -git config --global user.email email@blah.com
+                -git commit -m "Add existing file"  ....and add small message what you changed
+
+        5. Update on Github
+                -git push origin master (from shell to github)
+                -git pull origin master (from github to shell)
+
+
 ## Reference genome
 
 Reference genomes can be downloaded from [Illumina iGenomes](http://support.illumina.com/sequencing/sequencing_software/igenome.html)
 
+## Download Test Data:
+Use the following protocol to download and prepare test dataset from NIST sample NA12878
 
-## Preparing VMbox, BaseSpace, and Shell:
-
-	Setting up VMbox
-		Download VirtualBox if not installed already
-		-http://download.virtualbox.org/virtualbox/5.1.6/VirtualBox-5.1.6-110634-Win.exe
-	Setting up BaseSpace:
-		-Download BaseSpace Native AppVM(.ova file) [url: ] 
-		-Import to VMBox
-		-Have BaseSpace opened before puTTY
-	
-	Access BaseSpace through a shell
-		-Download puTTY [url: ]
-		-Enter hostname: vagrant@localhost
-		-Port: 2222 , Ps: vagrant
-		*Use if puTTY is missing download -> sudo apt-get install
-
-	Download pipeline from github
-		-Git clone https://github.com/shashidhar22/ahcg_pipeline.git
-		-Fork on github 
-
-	Download genomic reference and dbSNP file using command:
-		- wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz [27m]
-		- tar -zxvf file.tar.gz
+        ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+        ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+        gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
+        gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
+        head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
+        head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 
 ## Before Starting the Pipeline Build Indexes for Reference Genome:
 	
@@ -64,16 +107,6 @@ Reference genomes can be downloaded from [Illumina iGenomes](http://support.illu
 		- O : output file
 		Command: java -jar ~/ahcg_pipeline/lib/picard.jar CreateSequenceDictionary \ 
 		R=hg19.fa \ O=reference.dict
-
-## Download Test Data:
-Use the following protocol to download and prepare test dataset from NIST sample NA12878
-
-	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
-	ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
-	gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
- 	gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
- 	head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
- 	head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 
 ## Run Pipeline:
 	-sudo apt-get install python3-minimal
@@ -114,38 +147,6 @@ Use the following protocol to download and prepare test dataset from NIST sample
 		screen -r 
 	Output: .vcf file
 
-## Setting up Github:
-
-	1. Steps to change the remote url for git repositories
-		- git clone https://github.com/shashidhar22/ahcg_pipeline.git
-		- fork on github
-		- ls -a
-		- cd .git
-		- vim config
-		- find url line
-		- git remote set-url origin htttps://github.com/username/otherrepository.git
-			- change the username to your own
-		- git remote -v (to check if remote URL has changed)
-	2. To share a project
-		- git push -u origin 
-
-	3. To not share a project
-		- ls -a 
-		- vi .gitignore 
-		- to not push certain files add filenames 	
-			Ex: *.a - no .a files
-			Ex: !lib.a - no track lib.a files
-
-	4. Commit the file that you have changed in your local repository
-		-git add "file name"  <----DO THIS ONE
-                EXTRA -git config --global user.name "Your Name"
-                EXTRA -git config --global user.email email@blah.com
-		-git commit -m "Add existing file"  ....and add small message what you changed
-		
-	5. Update on Github
-		-git push origin master (from shell to github)
-		-git pull origin master (from github to shell)
-
 ## Extracting BRCA1 Sequences:
 
 	1. Download gene coordinates file for hg19
@@ -154,7 +155,7 @@ Use the following protocol to download and prepare test dataset from NIST sample
 	2. Find variant NM_007294 from BRCA1
 		grep 'BRCA1' hg19_refGene.txt > brca.fa 
 		grep 'NM_007294' brca.fa > brca_variant.fa 
-	        *NM_007294 had more complete exomes 
+	        *NM_007294 had more complete exomes (https://dnasu.org/DNASU/Home.do)
 	3. Download bedtools
                 wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
                 tar -zxvf bedtools-2.25.0.tar.gz
@@ -163,12 +164,26 @@ Use the following protocol to download and prepare test dataset from NIST sample
                 *Make sure to place /path/to/lib/folder in .profile
 
 	4. Convert .txt to .bed
-		Command:
-	5. Use fastaFromBed
+		Command: Used Min script ./bedconverter.py
+	5. Use fastaFromBed from bedtools to get fasta file
 
 ## Extracting Variants Mapping to NA12878
 
-## How to Get NM numbers for Gene List
+	1. Download exome dataset
+		ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/
+
+	2. Get region of interest
+		samtools view -L <bed file> -b -o <out bam file> < in bam file>
+		*For more then one bam do: samtools merge <out merge bam name> *.bam
+	
+	3. Bam to Fastq
+		bedtools bamtofatq -i <bam file> -fq <fq r1> -fq2 <fq r2>
+
+## NM numbers for Gene List
+	Sources:
+		http://www.otogenetics.com/forms/Breast_Cancer_gene_list.pdf
+		https://s3.amazonaws.com/color-static-prod/pdfs/validationWhitePaper.pdf  
+	*See genelist.txt
 
 ##Create Variant bed file & Compare VCF file
 
@@ -183,7 +198,8 @@ Use the following protocol to download and prepare test dataset from NIST sample
 		bedtools intersect -a NA12878_variants.vcf -b nm_hg19_coord.bed > NA12878_hg19compare.vcf
 	
 	4) Compare GIAB to variant file
-		*GIAB does not hae chr like .vcf so put in the file
+		wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/latest/NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf.gz
+		*GIAB does not have 'chr' like .vcf so put in the file
 		awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf > giabCHR.vcf
 		bedtools intersect -header -a giabCHR.vcf -b nm_hg19_coord.bed > giab_chr_compare_varVCF.vcf 
 
@@ -193,21 +209,8 @@ Use the following protocol to download and prepare test dataset from NIST sample
 ## Run VSQR
 	
 	1) The files you'll need are the following:
-	https://software.broadinstitute.org/gatk/download/bundle
-	dbSNP: 
-	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/dbsnp_138.hg19.vcf.gz
-
-	HapMap:
-	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/hapmap_3.3.hg19.sites.vcf.gz
-	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/hapmap_3.3.hg19.sites.vcf.idx.gz
-
-	Omni:
-	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_omni2.5.hg19.sites.vcf.gz
-	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_omni2.5.hg19.sites.vcf.idx.gz
-
-	1000G Phase 1:
-	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_phase1.snps.high_confidence.hg19.sites.vcf.gz
-	ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/2.8/hg19/1000G_phase1.snps.high_confidence.hg19.sites.vcf.idx.gz
+		https://software.broadinstitute.org/gatk/downloads
+		See script: ./getbroadFile.sh or ./wgetfile.sh
 
 	2) Create a tabix indexed vcf file
 		a) bgzip the vcf file
@@ -215,7 +218,6 @@ Use the following protocol to download and prepare test dataset from NIST sample
 		b) tabix index the compressed vcf file
 			tabix -p vcf sample.vcf.gz
 		*use: cksum <filename> to see if file downloaded correctly
-		*See script ...
 
 	3) VariantRecalibrator
 		- https://software.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_variantrecalibration_VariantRecalibrator.php
@@ -235,13 +237,15 @@ Use the following protocol to download and prepare test dataset from NIST sample
                 sed -E -e 's/^([^c].*)/chr\1/' > benign_brcaxref.bed
 
 	2) Obtain Report
+		#Gene alignment
 		samtools view -L [variant bed file] -b project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwq.markDuplicates.bam > new.bam
+		#Coverage for genes
 		bedtools genomecov -ibam new.bam -bga [patient bed file]
 		bedtools intersect -split -a [gene bed file] -b [patient bed file] -bed > output.bed
 		bedtools intersect -a brcadepth.bed -b benign_brcaxref.bed -wo > brca1_report.bed
 		cat brca1_report.bed | cut -f4,5,7,8,10 > brca1_Report.bed [5 results]
 
-#DCM Gene List and Coordinates So Far...
+#DCM Gene List and Coordinate of Variants
 
 |Disease|Gene|Nmid|Variant-c|Variant-p|rsid|coordinates-hg38 (variant)|hg37 |type|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|	
@@ -253,3 +257,9 @@ Use the following protocol to download and prepare test dataset from NIST sample
 |DCM|MYH6|NM_002471|-|-|-|-|-|-|					
 |DCM|SCN5A|NM_198056.2|c.5872C>T|p.Arg1958Ter|rs757532106|chr3 : 38550500|-|nonsense|
 |DCM|TNNT2|NM_001001430.2|c.629_631delAGA|p.Lys210del|rs121964859|chr1 : 201361971 - 201361973|-|deletion|
+
+#Get Bam files for DCM Patients and Controls
+	*See script ./patientbams.sh
+
+#DCM Script for Variants and Coverage
+	*See script ./final_pipeline.sh and README2.md
